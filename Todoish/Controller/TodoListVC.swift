@@ -6,10 +6,11 @@
 //
 
 import UIKit
-import CoreData
 import RealmSwift
+import SwipeCellKit
 
-class TodoListVC: UITableViewController {
+class TodoListVC: SwipeTableVC {
+    
     let realm = try! Realm()
     var todoItems: Results<Item>?
     var selectedCategory : Category? {
@@ -24,15 +25,19 @@ class TodoListVC: UITableViewController {
         
          
         //loadItems()
-        
+        tableView.rowHeight = 100
 
     }
     //MARK - TAbleview Datasource Methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return todoItems?.count ?? 1
     }
+    
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+
         
         if let item = todoItems?[indexPath.row] {
             cell.textLabel?.text = item.title
@@ -102,6 +107,19 @@ class TodoListVC: UITableViewController {
         tableView.reloadData()
     }
     
+    override func updateModel(at indexPath: IndexPath) {
+        
+        if let itemForDeletion = todoItems?[indexPath.row] {
+            do {
+                try realm.write {
+                    realm.delete(itemForDeletion)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+        }
+    }
     
 }
 
@@ -126,3 +144,4 @@ extension TodoListVC: UISearchBarDelegate {
     
     
 }
+ 
