@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -147,7 +147,7 @@
 				};
 			};
 			buildConfigurationList = 36AE877D2C9567EC0022EA4C /* Build configuration list for PBXProject "Todoish" */;
-			compatibilityVersion = "Xcode 15.3";
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
