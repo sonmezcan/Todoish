@@ -7,8 +7,9 @@
 
 import UIKit
 import CoreData
+import SwipeCellKit
 
-class CategoryVC: UITableViewController {
+class CategoryVC: SwipeTableVC {
 
     var categories = [Category]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -17,6 +18,7 @@ class CategoryVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadCategories()
+        tableView.rowHeight = 100
     }
 
     // MARK: - Add new categories
@@ -46,10 +48,10 @@ class CategoryVC: UITableViewController {
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         
-        cell.textLabel?.text = categories[indexPath.row].name
+        cell.textLabel?.text = categories[indexPath.row].name ?? "no categories added yet"
         
      return cell
     }
@@ -93,7 +95,11 @@ class CategoryVC: UITableViewController {
         tableView.reloadData()
     }
     
-
+    
+    override func updateModel(at indexPath: IndexPath) {
+        context.delete(categories[indexPath.row])
+        categories.remove(at: indexPath.row)
+    }
     
 
 }

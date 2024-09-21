@@ -7,8 +7,9 @@
 
 import UIKit
 import CoreData
+import SwipeCellKit
 
-class TodoListVC: UITableViewController {
+class TodoListVC: SwipeTableVC {
 
     var itemArray = [Item]()
     var selectedCategory : Category? {
@@ -24,19 +25,18 @@ class TodoListVC: UITableViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-         
+        tableView.rowHeight = 100
         loadItems()
-        
-
     }
-    //MARK - TAbleview Datasource Methods
+    override func viewWillAppear(_ animated: Bool) {
+        title = selectedCategory!.name
+    }
+    //MARK: - TAbleview Datasource Methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemArray.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         let item = itemArray[indexPath.row]
         
@@ -115,6 +115,10 @@ class TodoListVC: UITableViewController {
         tableView.reloadData()
     }
     
+    override func updateModel(at indexPath: IndexPath) {
+        context.delete(itemArray[indexPath.row])
+        itemArray.remove(at: indexPath.row)
+    }
     
 }
 
